@@ -7,24 +7,26 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-const RatingInput = ({
+function RatingInput({
   name,
   labelText,
 }: {
   name: string;
   labelText?: string;
-}) => {
+}) {
   const numbers = Array.from({ length: 5 }, (_, i) => {
     const value = i + 1;
     return value.toString();
   }).reverse();
-
   return (
     <div className='mb-2 max-w-xs'>
       <Label htmlFor={name} className='capitalize'>
         {labelText || name}
       </Label>
-      <Select defaultValue={numbers[0]} name={name} required>
+      <Select defaultValue={numbers[0]} name={name} required onValueChange={(value) => {
+  console.log("Current rating:=====================================================================", value); 
+}}>
+        
         <SelectTrigger>
           <SelectValue />
         </SelectTrigger>
@@ -40,6 +42,5 @@ const RatingInput = ({
       </Select>
     </div>
   );
-};
-
+}
 export default RatingInput;

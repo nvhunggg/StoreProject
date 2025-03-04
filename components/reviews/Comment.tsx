@@ -1,43 +1,31 @@
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import Rating from './Rating';
-import Comment from './Comment';
-import Image from 'next/image';
+'use client';
 
-type ReviewCardProps = {
-  reviewInfo: {
-    comment: string;
-    rating: number;
-    name: string;
-    image: string;
+import { useState } from 'react';
+import { Button } from '../ui/button';
+
+function Comment({ comment }: { comment: string }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const toggleExpanded = () => {
+    setIsExpanded(!isExpanded);
   };
-  children?: React.ReactNode;
-};
 
-function ReviewCard({ reviewInfo, children }: ReviewCardProps) {
+  const longComment = comment.length > 130;
+  const displayComment =
+    longComment && !isExpanded ? `${comment.slice(0, 130)}...` : comment;
+
   return (
-    <Card className='relative'>
-      <CardHeader>
-        <div className='flex items-center'>
-          <Image
-            src={reviewInfo.image}
-            alt={reviewInfo.name}
-            width={48}
-            height={48}
-            className='w-12 h-12 rounded-full object-cover'
-          />
-          <div className='ml-4'>
-            <h3 className='text-sm font-bold capitalize mb-1'>
-              {reviewInfo.name}
-            </h3>
-            <Rating rating={reviewInfo.rating} />
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <Comment comment={reviewInfo.comment} />
-      </CardContent>
-      <div className='absolute top-3 right-3'>{children}</div>
-    </Card>
+    <div>
+      <p className='text-sm'>{displayComment}</p>
+      {longComment && (
+        <Button
+          variant='link'
+          className='pl-0 text-muted-foreground'
+          onClick={toggleExpanded}
+        >
+          {isExpanded ? 'Show Less' : 'Show More'}
+        </Button>
+      )}
+    </div>
   );
 }
-export default ReviewCard;
+export default Comment;
